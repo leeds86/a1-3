@@ -50,8 +50,6 @@ export default async function handler(req, res) {
 - 같은 표현을 반복하지 말고 의뢰인의 사주 특징을 반영하세요.
 
 [작성 형식 - 반드시 아래 구조로 작성]
-## 🌙 ${name}님의 ${targetYear} 운세
-
 **${targetYear} 기운**
 (2~3문장, ${targetYear} 전반적인 운세)
 
@@ -65,10 +63,10 @@ export default async function handler(req, res) {
 (2~3문장)
 
 **🌿 건강과 에너지**
-(1~2문장)
+(2~3문장)
 
-**✨ 토정 선생의 한마디**
-(고전적 지혜가 담긴 따뜻한 조언 1~2문장)
+**월별 운세**
+(각 월별로 2~3문장씩, 1월부터 12월까지)
 
 [주의사항]
 - 부정적인 표현은 부드럽게 순화
