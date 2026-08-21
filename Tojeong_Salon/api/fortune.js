@@ -5,6 +5,11 @@ export default async function handler(req, res) {
         return res.status(405).json({ error: 'Method not allowed' });
     }
 
+    if (!process.env.OPENAI_API_KEY) {
+        console.error('OPENAI_API_KEY is not configured');
+        return res.status(500).json({ error: 'OpenAI API 키가 설정되지 않았습니다.' });
+    }
+
     const { name, targetYear,birthdate, calendarType, gender, birthHour } = req.body;
 
     // 입력값 검증
@@ -80,7 +85,7 @@ export default async function handler(req, res) {
                 'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
             },
             body: JSON.stringify({
-                model: 'gpt-5.6-luna',
+                model: 'gpt-5.4-nano',
                 messages: [
                     {
                         role: 'system',
@@ -104,7 +109,11 @@ export default async function handler(req, res) {
             return res.status(500).json({ error: 'AI 호출 실패' });
         }
 
-        const result = data.choices[0].message.content;
+        const result = data.choices?.[0]?.message?.content;
+        if (!result) {
+            console.error('OpenAI response did not include a result:', data);
+            return res.status(500).json({ error: 'AI 응답 형식이 올바르지 않습니다.' });
+        }
         return res.status(200).json({ result });
 
     } catch (error) {
