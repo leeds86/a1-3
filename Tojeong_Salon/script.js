@@ -24,7 +24,6 @@ themeToggle.addEventListener('click', () => {
 async function startReading() {
 
     // 1. 입력값 가져오기
-    const name         = document.getElementById('userName').value.trim();
     const targetYear   = document.getElementById('targetYear').value; // 추가됨
     const birthdate    = document.getElementById('birthDate').value;
     const calendarType = document.getElementById('calendarType').value;
@@ -32,10 +31,6 @@ async function startReading() {
     const birthHour    = document.getElementById('birthHour').value;
 
     // 2. 검증
-    if (!name) {
-        alert('이름을 입력해주세요 🙏');
-        return;
-    }
     if (!birthdate) {
         alert('생년월일을 입력해주세요 🙏');
         return;
@@ -67,7 +62,6 @@ async function startReading() {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                name,
                 targetYear, // 추가됨
                 birthdate,
                 calendarType,
@@ -83,7 +77,7 @@ async function startReading() {
         }
 
         // 5. 결과 출력
-        resultTitle.textContent     = `${name}님의 ${targetYear} 운세`;
+        resultTitle.textContent     = `${targetYear} 운세 리포트`;
         resultText.innerHTML        = formatResult(data.result);
         loadingState.style.display  = 'none';   // 로딩 숨김
         resultContent.style.display = 'block';  // 결과 표시
