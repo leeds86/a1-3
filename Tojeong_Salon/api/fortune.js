@@ -48,7 +48,7 @@ export default async function handler(req, res) {
 - 같은 표현을 반복하지 말고 의뢰인의 사주 특징을 반영하세요.
 
 [작성 형식 - 반드시 아래 구조와 순서를 지켜 작성]
-**${targetYear}의 전체적인 기운**
+**🔮 ${targetYear}의 전체적인 기운**
 (${targetYear}의 전반적인 흐름을 3~4문장으로 요약)
 
 (구분선 삽입)
@@ -65,7 +65,7 @@ export default async function handler(req, res) {
 (생활 습관과 컨디션 관리에 관한 현실적인 조언을 1~2문장으로 작성)
 
 (구분선 삽입)
-**${targetYear} 월별 운세 흐름**
+**🗓️ ${targetYear} 월별 운세 흐름**
 (각 월별로 2~3문장씩 작성하고, 각 달의 흐름과 실천 키워드를 포함)
 •1월: (내용)
 •2월: (내용)

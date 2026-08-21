@@ -83,7 +83,7 @@ async function startReading() {
         }
 
         // 5. 결과 출력
-        resultTitle.textContent     = `${name}님의 ${targetYear} 운세🔮`;
+        resultTitle.textContent     = `${name}님의 ${targetYear} 운세`;
         resultText.innerHTML        = formatResult(data.result);
         loadingState.style.display  = 'none';   // 로딩 숨김
         resultContent.style.display = 'block';  // 결과 표시
@@ -126,8 +126,7 @@ document.getElementById('shareBtn').addEventListener('click', async () => {
         try {
             await navigator.share({
                 title: '토정 살롱 - 나의 운세',
-                text: shareText,
-                url: window.location.href
+                text: shareText
             });
         } catch (error) {
             if (error.name !== 'AbortError') {
