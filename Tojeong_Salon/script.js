@@ -24,11 +24,11 @@ themeToggle.addEventListener('click', () => {
 async function startReading() {
 
     // 1. 입력값 가져오기
-    const name       = document.getElementById('userName').value.trim();
-    const birthdate  = document.getElementById('birthDate').value;
+    const name         = document.getElementById('userName').value.trim();
+    const birthdate    = document.getElementById('birthDate').value;
     const calendarType = document.getElementById('calendarType').value;
-    const genderEl   = document.querySelector('input[name="gender"]:checked');
-    const birthHour  = document.getElementById('birthHour').value;
+    const genderEl     = document.querySelector('input[name="gender"]:checked');
+    const birthHour    = document.getElementById('birthHour').value;
 
     // 2. 검증
     if (!name) {
@@ -46,15 +46,19 @@ async function startReading() {
 
     const gender = genderEl.value;
 
-    // 3. 결과 화면으로 전환 + 로딩 표시
-    showSection('result');
-    const resultDiv = document.getElementById('resultText');
-    resultDiv.innerHTML = `
-        <div class="loading-text">
-            🔮 토정 선생이 살펴보고 있습니다...<br>
-            <small style="font-size:14px; opacity:0.6;">잠시만 기다려주세요</small>
-        </div>
-    `;
+    // 3. 결과 카드 보여주기 + 로딩 상태 표시
+    const resultCard    = document.getElementById('resultCard');
+    const loadingState  = document.getElementById('loadingState');
+    const resultContent = document.getElementById('resultContent');
+    const resultText    = document.getElementById('resultText');
+    const resultTitle   = document.getElementById('resultTitle');
+
+    resultCard.style.display    = 'block';   // 카드 표시
+    loadingState.style.display  = 'block';   // 로딩 표시
+    resultContent.style.display = 'none';    // 결과 숨김
+
+    // 결과 카드로 스크롤
+    resultCard.scrollIntoView({ behavior: 'smooth' });
 
     // 4. API 호출
     try {
@@ -77,17 +81,18 @@ async function startReading() {
         }
 
         // 5. 결과 출력
-        resultDiv.innerHTML = formatResult(data.result);
+        resultTitle.textContent     = `${name}님의 운세`;
+        resultText.innerHTML        = formatResult(data.result);
+        loadingState.style.display  = 'none';   // 로딩 숨김
+        resultContent.style.display = 'block';  // 결과 표시
 
     } catch (error) {
-        resultDiv.innerHTML = `
+        loadingState.style.display = 'none';
+        resultContent.style.display = 'block';
+        resultText.innerHTML = `
             <div style="text-align:center; padding: 20px;">
                 <p style="font-size:18px;">😢 오류가 발생했습니다</p>
                 <p style="opacity:0.6; margin-top:8px;">${error.message}</p>
-                <button class="btn-main" onclick="showSection('home')" 
-                    style="margin-top:24px; max-width:200px;">
-                    다시 시도하기
-                </button>
             </div>
         `;
     }
@@ -108,9 +113,9 @@ function formatResult(text) {
 
 
 // ========================================
-// 공유 버튼
+// 공유 버튼 (버그4 수정: addEventListener 연결)
 // ========================================
-function shareResult() {
+document.getElementById('shareBtn').addEventListener('click', () => {
     if (navigator.share) {
         navigator.share({
             title: '토정 살롱 - 나의 운세',
@@ -121,4 +126,4 @@ function shareResult() {
         navigator.clipboard.writeText(window.location.href);
         alert('링크가 복사되었습니다! 📋');
     }
-}
+});
