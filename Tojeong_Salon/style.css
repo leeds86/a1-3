@@ -374,8 +374,8 @@ select:focus {
    ======================================== */
 .theme-toggle {
     position: fixed;
-    top: 16px;
     right: 20px;
+    bottom: calc(20px + env(safe-area-inset-bottom));
     z-index: 1000;
     background: var(--card-bg);
     border: 1px solid var(--border-color);

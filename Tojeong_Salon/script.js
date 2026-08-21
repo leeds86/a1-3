@@ -83,7 +83,7 @@ async function startReading() {
         }
 
         // 5. 결과 출력
-        resultTitle.textContent     = `🔮 ${name}님의 ${targetYear} 운세 `;
+        resultTitle.textContent     = `${name}님의 ${targetYear} 운세🔮`;
         resultText.innerHTML        = formatResult(data.result);
         loadingState.style.display  = 'none';   // 로딩 숨김
         resultContent.style.display = 'block';  // 결과 표시
@@ -115,17 +115,32 @@ function formatResult(text) {
 
 
 // ========================================
-// 공유 버튼 (버그4 수정: addEventListener 연결)
+// 공유 버튼
 // ========================================
-document.getElementById('shareBtn').addEventListener('click', () => {
+document.getElementById('shareBtn').addEventListener('click', async () => {
+    const title = document.getElementById('resultTitle').textContent;
+    const result = document.getElementById('resultText').innerText;
+    const shareText = `${title}\n\n${result}`;
+
     if (navigator.share) {
-        navigator.share({
-            title: '토정 살롱 - 나의 운세',
-            text: '토정 살롱에서 운세를 확인해보세요!',
-            url: window.location.href
-        });
-    } else {
-        navigator.clipboard.writeText(window.location.href);
-        alert('링크가 복사되었습니다! 📋');
+        try {
+            await navigator.share({
+                title: '토정 살롱 - 나의 운세',
+                text: shareText,
+                url: window.location.href
+            });
+        } catch (error) {
+            if (error.name !== 'AbortError') {
+                alert('공유에 실패했습니다. 잠시 후 다시 시도해주세요.');
+            }
+        }
+        return;
+    }
+
+    try {
+        await navigator.clipboard.writeText(shareText);
+        alert('운세 결과가 복사되었습니다! 📋');
+    } catch {
+        alert('공유 기능을 사용할 수 없습니다.');
     }
 });

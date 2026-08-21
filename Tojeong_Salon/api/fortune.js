@@ -51,6 +51,7 @@ export default async function handler(req, res) {
 **${targetYear}의 전체적인 기운**
 (${targetYear}의 전반적인 흐름을 3~4문장으로 요약)
 
+(구분선 삽입)
 **💼 일과 성취**
 (업무, 학업, 목표 달성에 관한 흐름과 실천 조언을 4~5문장으로 작성)
 
@@ -63,7 +64,8 @@ export default async function handler(req, res) {
 **🌿 건강과 에너지**
 (생활 습관과 컨디션 관리에 관한 현실적인 조언을 1~2문장으로 작성)
 
-**🗓️ ${targetYear} 월별 운세 흐름**
+(구분선 삽입)
+**${targetYear} 월별 운세 흐름**
 (각 월별로 2~3문장씩 작성하고, 각 달의 흐름과 실천 키워드를 포함)
 •1월: (내용)
 •2월: (내용)
@@ -78,6 +80,7 @@ export default async function handler(req, res) {
 •11월: (내용)
 •12월: (내용)
 
+(구분선 삽입)
 **✨ 토정 살롱의 한마디**
 (${targetYear}를 준비하는 데 도움이 되는 품위 있고 따뜻한 조언을 2~3문장으로 작성)
 `;
