@@ -25,6 +25,7 @@ async function startReading() {
 
     // 1. 입력값 가져오기
     const name         = document.getElementById('userName').value.trim();
+    const targetYear   = document.getElementById('targetYear').value; // 추가됨
     const birthdate    = document.getElementById('birthDate').value;
     const calendarType = document.getElementById('calendarType').value;
     const genderEl     = document.querySelector('input[name="gender"]:checked');
@@ -67,6 +68,7 @@ async function startReading() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 name,
+                targetYear, // 추가됨
                 birthdate,
                 calendarType,
                 gender,

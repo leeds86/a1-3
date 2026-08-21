@@ -5,7 +5,7 @@ export default async function handler(req, res) {
         return res.status(405).json({ error: 'Method not allowed' });
     }
 
-    const { name, birthdate, calendarType, gender, birthHour } = req.body;
+    const { name, targetYear,birthdate, calendarType, gender, birthHour } = req.body;
 
     // 입력값 검증
     if (!name || !birthdate || !gender) {
@@ -18,19 +18,37 @@ export default async function handler(req, res) {
 
     const prompt = `
 당신은 조선시대 토정 이지함의 지혜를 현대적으로 해석하는 운세 전문가입니다.
-따뜻하고 통찰력 있는 어조로, 아래 정보를 바탕으로 토정비결식 운세를 풀어주세요.
+이지함 선생의 마음처럼 따뜻하고 인문학적인 말투로, 아래 정보를 바탕으로 토정비결식 운세를 풀어주세요.
 
 [의뢰인 정보]
 - 이름: ${name}
+- 궁금한 시기: ${targetYear}
 - 생년월일: ${birthdate} (${calendarText})
 - 성별: ${gender}
 - ${hourText}
 
-[작성 형식 - 반드시 아래 구조로 작성]
-## 🌙 ${name}님의 토정 살롱 운세
+아래 3가지로 나눠서 따뜻하게 풀이해주세요:
+1. 사주로 본 타고난 성향
+2. 토정비결로 본 ${targetYear}의 운세
+3. 두 관점을 종합한 조언
 
-**올해의 기운**
-(2~3문장, 올해 전반적인 운세)
+[해석 원칙]
+- 위에 제공된 사주 계산 결과를 기준으로 해석하세요.
+- 제공되지 않은 사주 정보를 임의로 계산하거나 만들어내지 마세요.
+- ${targetYear}의 흐름과 타고난 성향을 연결해서 해석하세요.
+- 어려운 명리학 용어는 가능한 한 쉬운 한국어로 설명하세요.
+- 긍정적인 면과 주의할 점을 균형 있게 제시하세요.
+- 미래를 확정적으로 단정하지 마세요.
+- 공포, 불안, 미신적 확신을 조장하지 마세요.
+- 건강은 생활 습관과 에너지 관리 수준의 조언만 제공하세요.
+- 재물에 대해서는 투자나 금융상품을 특정하거나 권유하지 마세요.
+- 같은 표현을 반복하지 말고 의뢰인의 사주 특징을 반영하세요.
+
+[작성 형식 - 반드시 아래 구조로 작성]
+## 🌙 ${name}님의 ${targetYear} 운세
+
+**${targetYear} 기운**
+(2~3문장, ${targetYear} 전반적인 운세)
 
 **💼 일과 성취**
 (2~3문장)
@@ -62,7 +80,7 @@ export default async function handler(req, res) {
                 'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
             },
             body: JSON.stringify({
-                model: 'gpt-4o-mini',
+                model: 'gpt-5-nano',
                 messages: [
                     {
                         role: 'system',
