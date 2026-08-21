@@ -193,6 +193,10 @@ body.dark .nav button:hover {
     color: var(--text-color);
 }
 
+#resultTitle {
+    font-size: 28px;
+}
+
 
 /* ========================================
    6. 폼 요소
