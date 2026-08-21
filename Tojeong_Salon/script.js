@@ -83,7 +83,7 @@ async function startReading() {
         }
 
         // 5. 결과 출력
-        resultTitle.textContent     = `${name}님의 ${targetYear} 운세`;
+        resultTitle.textContent     = `🔮 ${name}님의 ${targetYear} 운세`;
         resultText.innerHTML        = formatResult(data.result);
         loadingState.style.display  = 'none';   // 로딩 숨김
         resultContent.style.display = 'block';  // 결과 표시
