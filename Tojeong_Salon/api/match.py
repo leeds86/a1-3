@@ -62,15 +62,14 @@ class handler(BaseHTTPRequestHandler):
 [사람 A]
 - 생년월일: {my_birthdate} ({my_calendar})
 - 성별: {my_gender}
-- 태어난 시: {my_info.get('birthHour') or '미상'}
 
 [사람 B]
 - 생년월일: {partner_birthdate} ({partner_calendar})
 - 성별: {partner_gender}
-- 태어난 시: {partner_info.get('birthHour') or '미상'}
 
 [해석 원칙]
-- 위에 제공된 정보만 사용하세요. 제공되지 않은 사주 정보를 임의로 계산하거나 만들어내지 마세요.
+- 제공된 생년월일, 양력/음력, 성별 정보만 사용하세요.
+- 태어난 시각은 궁합 해석에 사용하지 않습니다.
 - 두 사람의 차이와 조화를 함께 살펴보세요.
 - 관계 유형({relation_type})에 맞게 해석의 초점을 조절하세요.
 - '천생연분', '운명', '반드시 헤어진다'처럼 관계의 결과를 확정적으로 단정하지 마세요.
