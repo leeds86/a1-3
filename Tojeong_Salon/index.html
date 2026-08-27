@@ -92,9 +92,8 @@
             <p>두 사람의 인연을 따뜻하게 살펴봅니다</p>
         </div>
 
-        <div class="card input-card">
-            <h3 class="card-title">궁합 정보 입력</h3>
-            <h4 style="margin-top: 10px; margin-bottom: 16px; color: var(--text-color); font-size: 16px; font-weight: 600;">나의 정보</h4>
+        <div class="card input-card match-person-card">
+            <h3 class="card-title">나의 정보</h3>
             <div class="form-group">
                 <label for="myBirthDate">생년월일</label>
                 <div class="input-row">
@@ -113,8 +112,10 @@
                     <label class="radio-label"><input type="radio" name="myGender" value="female"> 여성</label>
                 </div>
             </div>
-            <hr style="border: 0; height: 1px; background-color: var(--border-color); margin: 32px 0;">
-            <h4 style="margin-top: 10px; margin-bottom: 16px; color: var(--text-color); font-size: 16px; font-weight: 600;">상대방 정보</h4>
+        </div>
+
+        <div class="card input-card match-person-card">
+            <h3 class="card-title">상대방 정보</h3>
             <div class="form-group">
                 <label for="partnerBirthDate">생년월일</label>
                 <div class="input-row">
@@ -133,16 +134,18 @@
                     <label class="radio-label"><input type="radio" name="partnerGender" value="female"> 여성</label>
                 </div>
             </div>
-            <div class="form-group" style="margin-top: 24px;">
-                <label for="relationType">관계 유형</label>
-                <select id="relationType">
-                    <option value="연인">연인 (커플, 부부)</option>
-                    <option value="썸">썸 (알아가는 중)</option>
-                    <option value="친구">친구 (동성, 이성)</option>
-                    <option value="동료">직장 동료 / 비즈니스</option>
-                </select>
+            <div class="match-relation">
+                <div class="form-group">
+                    <label for="relationType">관계 유형</label>
+                    <select id="relationType">
+                        <option value="연인">연인 (커플, 부부)</option>
+                        <option value="썸">썸 (알아가는 중)</option>
+                        <option value="친구">친구 (동성, 이성)</option>
+                        <option value="동료">직장 동료 / 비즈니스</option>
+                    </select>
+                </div>
+                <button class="btn-main" id="matchBtn" onclick="startMatchReading">💞 궁합 풀이 시작하기</button>
             </div>
-            <button class="btn-main" id="matchBtn" onclick="startMatchReading()">💞 궁합 풀이 시작하기</button>
         </div>
 
         <div class="card result-card" id="matchResultCard" style="display:none;">
