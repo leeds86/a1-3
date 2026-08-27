@@ -120,11 +120,91 @@
     <section id="match" class="section">
         <div class="hero">
             <h2>인연 궁합</h2>
-            <p>두 사람의 인연을 살펴봅니다</p>
+            <p>두 사람의 인연을 따뜻하게 살펴봅니다</p>
         </div>
+
         <div class="card input-card">
-            <p style="text-align:center; color: var(--border-color);">🚧 준비 중입니다</p>
+            <h3 class="card-title">궁합 정보 입력</h3>
+
+            <!-- 1. 나의 정보 -->
+            <h4 style="margin-top: 10px; margin-bottom: 16px; color: var(--text-color); font-size: 16px; font-weight: 600;">나의 정보</h4>
+            
+            <div class="form-group">
+                <label for="myBirthDate">생년월일</label>
+                <div class="input-row">
+                    <input type="date" id="myBirthDate" min="1930-01-01" max="2029-12-31">
+                    <select id="myCalendarType">
+                        <option value="solar">양력</option>
+                        <option value="lunar">음력(평달)</option>
+                        <option value="lunar-leap">음력(윤달)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>성별</label>
+                <div class="radio-group">
+                    <label class="radio-label"><input type="radio" name="myGender" value="male"> 남성</label>
+                    <label class="radio-label"><input type="radio" name="myGender" value="female"> 여성</label>
+                </div>
+            </div>
+
+            <!-- 시각적 구분선 -->
+            <hr style="border: 0; height: 1px; background-color: var(--border-color); margin: 32px 0;">
+
+            <!-- 2. 상대방 정보 -->
+            <h4 style="margin-top: 10px; margin-bottom: 16px; color: var(--text-color); font-size: 16px; font-weight: 600;">상대방 정보</h4>
+
+            <div class="form-group">
+                <label for="partnerBirthDate">생년월일</label>
+                <div class="input-row">
+                    <input type="date" id="partnerBirthDate" min="1930-01-01" max="2029-12-31">
+                    <select id="partnerCalendarType">
+                        <option value="solar">양력</option>
+                        <option value="lunar">음력(평달)</option>
+                        <option value="lunar-leap">음력(윤달)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>성별</label>
+                <div class="radio-group">
+                    <label class="radio-label"><input type="radio" name="partnerGender" value="male"> 남성</label>
+                    <label class="radio-label"><input type="radio" name="partnerGender" value="female"> 여성</label>
+                </div>
+            </div>
+
+            <!-- 관계 선택 -->
+            <div class="form-group" style="margin-top: 24px;">
+                <label for="relationType">관계 유형</label>
+                <select id="relationType">
+                    <option value="연인">연인 (커플, 부부)</option>
+                    <option value="썸">썸 (알아가는 중)</option>
+                    <option value="친구">친구 (동성, 이성)</option>
+                    <option value="동료">직장 동료 / 비즈니스</option>
+                </select>
+            </div>
+
+            <!-- 버튼 -->
+            <button class="btn-main" id="matchBtn" onclick="startMatchReading()">
+                💞 궁합 풀이 시작하기
+            </button>
         </div>
+
+        <!-- 결과 카드 (처음엔 숨김) -->
+        <div class="card result-card" id="matchResultCard" style="display:none;">
+            <div id="matchLoadingState">
+                <p class="loading-text">💞 이지함 선생이 두 분의 인연을 엮어보는 중입니다...</p>
+            </div>
+            <div id="matchResultContent" style="display:none;">
+                <h3 class="card-title" id="matchResultTitle">우리의 인연 궁합 리포트</h3>
+                <div id="matchResultText" class="result-text"></div>
+                <!-- 공유 버튼 (ID 변경: matchShareBtn) -->
+                <button class="share-btn" id="matchShareBtn">🔗 궁합 결과 공유하기</button>
+            </div>
+        </div>
+
     </section>
 
     <!-- ===== 섹션 3: FAQ ===== -->

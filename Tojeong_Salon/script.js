@@ -137,3 +137,108 @@ document.getElementById('shareBtn').addEventListener('click', async () => {
         alert('공유 기능을 사용할 수 없습니다.');
     }
 });
+
+
+// ========================================
+// 인연 궁합 메인 함수 추가
+// ========================================
+async function startMatchReading() {
+    // 1. 입력값 가져오기
+    const myBirthDate = document.getElementById('myBirthDate').value;
+    const myCalendarType = document.getElementById('myCalendarType').value;
+    const myGenderEl = document.querySelector('input[name="myGender"]:checked');
+
+    const partnerBirthDate = document.getElementById('partnerBirthDate').value;
+    const partnerCalendarType = document.getElementById('partnerCalendarType').value;
+    const partnerGenderEl = document.querySelector('input[name="partnerGender"]:checked');
+    
+    const relationType = document.getElementById('relationType').value;
+
+    // 2. 검증
+    if (!myBirthDate || !partnerBirthDate) {
+        alert('나와 상대방의 생년월일을 모두 입력해주세요 🙏');
+        return;
+    }
+    if (!myGenderEl || !partnerGenderEl) {
+        alert('나와 상대방의 성별을 모두 선택해주세요 🙏');
+        return;
+    }
+
+    const myGender = myGenderEl.value;
+    const partnerGender = partnerGenderEl.value;
+
+    // 3. UI 처리 (로딩 표시)
+    const matchResultCard = document.getElementById('matchResultCard');
+    const matchLoadingState = document.getElementById('matchLoadingState');
+    const matchResultContent = document.getElementById('matchResultContent');
+    const matchResultText = document.getElementById('matchResultText');
+
+    matchResultCard.style.display = 'block';
+    matchLoadingState.style.display = 'block';
+    matchResultContent.style.display = 'none';
+    matchResultCard.scrollIntoView({ behavior: 'smooth' });
+
+    // 4. API 호출 (궁합 전용 엔드포인트: /api/match)
+    try {
+        const response = await fetch('/api/match', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                myInfo: { birthdate: myBirthDate, calendarType: myCalendarType, gender: myGender },
+                partnerInfo: { birthdate: partnerBirthDate, calendarType: partnerCalendarType, gender: partnerGender },
+                relationType
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || '오류가 발생했습니다.');
+        }
+
+        // 5. 결과 출력
+        matchResultText.innerHTML = formatResult(data.result);
+        matchLoadingState.style.display = 'none';
+        matchResultContent.style.display = 'block';
+
+    } catch (error) {
+        matchLoadingState.style.display = 'none';
+        matchResultContent.style.display = 'block';
+        matchResultText.innerHTML = `
+            <div style="text-align:center; padding: 20px;">
+                <p style="font-size:18px;">😢 오류가 발생했습니다</p>
+                <p style="opacity:0.6; margin-top:8px;">${error.message}</p>
+            </div>
+        `;
+    }
+}
+
+// ========================================
+// 궁합 공유 버튼 기능 추가
+// ========================================
+document.getElementById('matchShareBtn')?.addEventListener('click', async () => {
+    const title = document.getElementById('matchResultTitle').textContent;
+    const result = document.getElementById('matchResultText').innerText;
+    const shareText = `${title}\n\n${result}`;
+
+    if (navigator.share) {
+        try {
+            await navigator.share({
+                title: '토정 살롱 - 인연 궁합',
+                text: shareText
+            });
+        } catch (error) {
+            if (error.name !== 'AbortError') {
+                alert('공유에 실패했습니다. 잠시 후 다시 시도해주세요.');
+            }
+        }
+        return;
+    }
+
+    try {
+        await navigator.clipboard.writeText(shareText);
+        alert('궁합 결과가 복사되었습니다! 📋');
+    } catch {
+        alert('공유 기능을 사용할 수 없습니다.');
+    }
+});
