@@ -5,7 +5,6 @@ from http.server import BaseHTTPRequestHandler
 
 class handler(BaseHTTPRequestHandler):
     
-    # CORS 프리플라이트 요청 처리 (로컬 및 교차 출처 리소스 공유 허용)
     def do_OPTIONS(self):
         self.send_response(200, "ok")
         self.send_header('Access-Control-Allow-Origin', '*')
@@ -13,16 +12,13 @@ class handler(BaseHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
         self.end_headers()
 
-    # POST 요청 처리
     def do_POST(self):
-        # 1. API 키 확인
         api_key = os.environ.get('OPENAI_API_KEY')
         if not api_key:
             print("OPENAI_API_KEY is not configured")
             self._send_error(500, "OpenAI API 키가 설정되지 않았습니다.")
             return
 
-        # 2. 요청 본문(Body) 파싱
         content_length = int(self.headers.get('Content-Length', 0))
         post_data = self.rfile.read(content_length)
 
@@ -38,33 +34,95 @@ class handler(BaseHTTPRequestHandler):
         gender = body.get('gender')
         birth_hour = body.get('birthHour')
 
-        # 3. 필수 입력값 검증
+        # 궁합 요청: 두 번째 사람의 정보가 함께 전달된 경우
+        partner_birthdate = body.get('partnerBirthdate')
+        partner_calendar_type = body.get('partnerCalendarType')
+        partner_gender = body.get('partnerGender')
+        partner_birth_hour = body.get('partnerBirthHour')
+        is_compatibility = bool(partner_birthdate)
+
         if not birthdate or not gender:
             self._send_error(400, "필수 입력값이 없습니다.")
             return
 
-        # 4. 프롬프트 생성
-        hour_text = f"태어난 시: {birth_hour}시" if birth_hour else "태어난 시: 미상"
-        
-        if calendar_type == 'lunar':
-            calendar_text = '음력(평달)'
-        elif calendar_type == 'lunar-leap':
-            calendar_text = '음력(윤달)'
-        else:
-            calendar_text = '양력'
+        def calendar_label(value):
+            if value == 'lunar':
+                return '음력(평달)'
+            if value == 'lunar-leap':
+                return '음력(윤달)'
+            return '양력'
 
-        prompt = f"""
-당신은 조선시대 토정 이지함의 지혜를 현대적으로 해석하는 운세 전문가입니다.
-이지함 선생의 마음처럼 따뜻하고 인문학적인 말투로, 아래 정보를 바탕으로 토정비결식 운세를 풀어주세요.
+        calendar_text = calendar_label(calendar_type)
+        hour_text = f"태어난 시: {birth_hour}시" if birth_hour else "태어난 시: 미상"
+
+        if is_compatibility:
+            partner_calendar_text = calendar_label(partner_calendar_type)
+            partner_hour_text = f"태어난 시: {partner_birth_hour}시" if partner_birth_hour else "태어난 시: 미상"
+
+            prompt = f"""
+당신은 전통 사주와 토정비결의 관점을 현대적으로 해석하는 운세 전문가입니다.
+오래된 지혜를 오늘의 언어로 풀어내되, 특정 역사적 인물의 권위나 실제 발언을 인용하지 마세요.
+두 사람의 관계를 운명처럼 단정하지 않고, 서로의 성향과 관계의 흐름을 이해하는 데 도움이 되는 따뜻하고 현실적인 궁합 해석을 제공하세요.
+
+[두 사람의 정보]
+[사람 A]
+- 생년월일: {birthdate} ({calendar_text})
+- 성별: {gender}
+- {hour_text}
+
+[사람 B]
+- 생년월일: {partner_birthdate} ({partner_calendar_text})
+- 성별: {partner_gender or '미상'}
+- {partner_hour_text}
+
+[해석 원칙]
+- 위에 제공된 사주 계산 결과가 있다면 그것을 기준으로 해석하세요.
+- 제공되지 않은 사주 정보를 임의로 계산하거나 만들어내지 마세요.
+- 두 사람의 차이와 조화를 함께 살펴보세요.
+- '천생연분', '운명', '반드시 헤어진다'처럼 관계의 결과를 확정적으로 단정하지 마세요.
+- 점수나 확률만으로 관계를 판단하지 말고 구체적인 성향과 상호작용을 설명하세요.
+- 어려운 명리학 용어는 가능한 한 쉬운 한국어로 설명하세요.
+- 긍정적인 면과 주의할 점을 균형 있게 제시하세요.
+- 갈등이 생길 수 있는 지점은 비난 없이 현실적인 대화와 행동 방법으로 풀어주세요.
+- 이별, 결혼, 재물 등을 예언하거나 결정을 대신하지 마세요.
+- 공포, 불안, 미신적 확신을 조장하지 마세요.
+- 건강 관련 판단이나 진단은 하지 마세요.
+- 같은 표현을 반복하지 말고 두 사람의 조합에 맞는 구체적인 내용을 작성하세요.
+
+[작성 형식 - 반드시 아래 구조와 순서를 지켜 작성]
+**💫 두 분의 인연**
+두 사람의 전체적인 관계 분위기와 서로에게 끌리는 지점을 2~3문장으로 작성
+
+(구분선 삽입)
+
+**🌿 서로의 성향**
+사람 A와 사람 B가 관계에서 보이기 쉬운 성향과 서로 다른 점을 2~3문장으로 작성
+
+**💕 잘 맞는 점**
+서로에게 긍정적인 영향을 주고 관계를 편안하게 만드는 요소를 2~3문장으로 작성
+
+**🌙 조심하면 좋은 점**
+오해나 갈등이 생기기 쉬운 지점과 관계를 위해 도움이 되는 현실적인 조언을 2~3문장으로 작성
+
+**🪞 두 분의 관계를 위한 팁**
+두 사람이 더 편안하고 건강하게 관계를 이어가기 위한 구체적인 행동이나 대화 방법을 2~3문장으로 작성
+
+(구분선 삽입)
+
+**✨ 토정 살롱의 한마디**
+두 사람의 인연을 운명으로 단정하지 않으면서도 여운이 남는 따뜻한 조언을 2~3문장으로 작성
+"""
+        else:
+            prompt = f"""
+당신은 전통 사주와 토정비결의 관점을 현대적으로 해석하는 운세 전문가입니다.
+오래된 지혜를 오늘의 언어로 풀어내되, 특정 역사적 인물의 권위나 실제 발언을 인용하지 마세요.
+따뜻하고 인문학적인 말투로 아래 정보를 바탕으로 토정비결식 운세를 풀어주세요.
 
 [의뢰인 정보]
 - 궁금한 시기: {target_year}
 - 생년월일: {birthdate} ({calendar_text})
 - 성별: {gender}
 - {hour_text}
-
-아래 구조의 개인 맞춤형 운세 리포트로 작성해주세요.
-각 항목은 서로 다른 내용을 다루고, 의뢰인의 정보와 {target_year}의 흐름이 자연스럽게 연결되도록 설명해주세요.
 
 [해석 원칙]
 - 위에 제공된 사주 계산 결과를 기준으로 해석하세요.
@@ -119,7 +177,6 @@ class handler(BaseHTTPRequestHandler):
 ({target_year}를 준비하는 데 도움이 되는 품위 있고 따뜻한 조언을 2~3문장으로 작성)
 """
 
-        # 5. OpenAI API 호출
         url = "https://api.openai.com/v1/chat/completions"
         headers = {
             "Content-Type": "application/json",
@@ -130,14 +187,14 @@ class handler(BaseHTTPRequestHandler):
             "messages": [
                 {
                     "role": "system",
-                    "content": "당신은 토정비결 전문가입니다. 따뜻하고 통찰력 있는 운세를 제공합니다."
+                    "content": "당신은 전통 사주와 토정비결을 현대적으로 해석하는 전문가입니다. 특정 역사적 인물의 권위를 내세우지 않고, 따뜻하고 통찰력 있는 해석을 제공합니다."
                 },
                 {
                     "role": "user",
                     "content": prompt
                 }
             ],
-            "max_tokens": 1000,
+            "max_tokens": 1200 if is_compatibility else 1000,
             "temperature": 0.8
         }
 
@@ -150,7 +207,6 @@ class handler(BaseHTTPRequestHandler):
                 self._send_error(500, "AI 호출 실패")
                 return
 
-            # 안전하게 응답 데이터 추출
             choices = data.get("choices", [])
             if not choices or not choices[0].get("message", {}).get("content"):
                 print("OpenAI response did not include a result:", data)
@@ -164,7 +220,6 @@ class handler(BaseHTTPRequestHandler):
             print("Server Error:", e)
             self._send_error(500, "서버 오류가 발생했습니다.")
 
-    # 공통 성공 응답 헬퍼 함수
     def _send_success(self, data):
         self.send_response(200)
         self.send_header('Content-type', 'application/json; charset=utf-8')
@@ -172,7 +227,6 @@ class handler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(json.dumps(data).encode('utf-8'))
 
-    # 공통 에러 응답 헬퍼 함수
     def _send_error(self, status_code, message):
         self.send_response(status_code)
         self.send_header('Content-type', 'application/json; charset=utf-8')
