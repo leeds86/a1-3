@@ -121,6 +121,14 @@ body.dark input:focus, body.dark select:focus { background-color: rgba(0,0,0,0.4
 .radio-group { display: flex; flex-wrap: nowrap; gap: 24px; padding-top: 8px; }
 .radio-label { display: inline-flex !important; flex: 0 0 auto; align-items: center; gap: 8px; cursor: pointer; font-size: 15px; white-space: nowrap; margin-bottom: 0 !important; }
 
+/* 궁합 입력은 두 사람을 시각적으로 분리 */
+.match-person-card { margin-bottom: 24px; }
+.match-person-card .card-title { text-align: left; font-size: 24px; margin-bottom: 28px; }
+.match-person-card:last-of-type { margin-bottom: 40px; }
+.match-relation { margin-top: 8px; padding-top: 28px; border-top: 1px solid var(--card-border); }
+.match-relation .form-group { margin-bottom: 0; }
+.match-relation .btn-main { margin-top: 24px; }
+
 .btn-main, .share-btn {
     width: 100%; border: none; padding: 18px 24px; font-size: 16px; font-weight: 600;
     border-radius: 16px; margin-top: 24px; cursor: pointer; font-family: inherit; transition: all 0.3s ease;
