@@ -115,12 +115,10 @@ async function startMatchReading() {
     const myBirthDate = document.getElementById('myBirthDate').value;
     const myCalendarType = document.getElementById('myCalendarType').value;
     const myGenderEl = document.querySelector('input[name="myGender"]:checked');
-    const myBirthHour = document.getElementById('myBirthHour')?.value || '';
 
     const partnerBirthDate = document.getElementById('partnerBirthDate').value;
     const partnerCalendarType = document.getElementById('partnerCalendarType').value;
     const partnerGenderEl = document.querySelector('input[name="partnerGender"]:checked');
-    const partnerBirthHour = document.getElementById('partnerBirthHour')?.value || '';
     const relationType = document.getElementById('relationType').value;
 
     if (!myBirthDate || !partnerBirthDate) {
@@ -152,14 +150,12 @@ async function startMatchReading() {
                 myInfo: {
                     birthdate: myBirthDate,
                     calendarType: myCalendarType,
-                    gender: myGender,
-                    birthHour: myBirthHour
+                    gender: myGender
                 },
                 partnerInfo: {
                     birthdate: partnerBirthDate,
                     calendarType: partnerCalendarType,
-                    gender: partnerGender,
-                    birthHour: partnerBirthHour
+                    gender: partnerGender
                 },
                 relationType
             })
