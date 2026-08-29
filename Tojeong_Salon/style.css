@@ -1,4 +1,4 @@
-﻿/* ========================================
+/* ========================================
    웹폰트 (무료 라이선스)
    - Pretendard (본문, UI)
    - 마루부리 (제목, 로고)
@@ -58,14 +58,23 @@ h1, h2, h3, h4, .logo { font-family: 'MaruBuri', serif; letter-spacing: -0.5px; 
 
 /* Header */
 .header {
-    background: transparent;
-    padding: 24px 40px;
+    background: rgba(220, 230, 226, 0.78);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--card-border);
+    padding: 16px 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     position: sticky;
     top: 0;
     z-index: 100;
+    transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+body.dark .header {
+    background: rgba(18, 33, 31, 0.82);
+    border-bottom: 1px solid var(--card-border);
 }
 
 .logo { 
