@@ -1,0 +1,17 @@
+﻿{
+  "version": 2,
+  "rewrites": [
+    {
+      "source": "/api/fortune",
+      "destination": "/api/fortune.py"
+    },
+    {
+      "source": "/api/match",
+      "destination": "/api/match.py"
+    },
+    {
+      "source": "/api/inquiry",
+      "destination": "/api/inquiry.py"
+    }
+  ]
+}
