@@ -3,428 +3,278 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>토정 살롱 🏛️ - 사주와 토정비결로 만나는 AI 현대 명리</title>
-    <!-- Pretendard Font -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+    <title>토정 살롱 🏛️</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- 토스트 알림 컨테이너 -->
+    <!-- 다크모드 플로팅 토글 버튼 -->
+    <button id="themeToggle" class="theme-toggle" aria-label="테마 전환">🌙</button>
+
+    <!-- 토스트 알림 -->
     <div id="toast" class="toast"></div>
 
     <!-- 헤더 & 네비게이션 -->
     <header class="header">
-        <div class="header-container">
-            <div class="logo-area" onclick="showSection('home')">
-                <span class="logo-icon">🏛️</span>
-                <span class="logo-text">토정 살롱</span>
-                <span class="logo-badge">AI 명리</span>
-            </div>
-            <nav class="nav">
-                <button class="nav-btn active" data-target="home" onclick="showSection('home')">내 운세</button>
-                <button class="nav-btn" data-target="match" onclick="showSection('match')">인연 궁합</button>
-                <button class="nav-btn" data-target="faq" onclick="showSection('faq')">FAQ</button>
-                <button class="nav-btn" data-target="inquiry" onclick="showSection('inquiry')">살롱 문의</button>
-            </nav>
-            <div class="header-actions">
-                <button id="historyBtn" class="action-btn" title="내가 본 운세 기록함" onclick="toggleHistoryModal(true)">
-                    📜 <span class="action-btn-text">기록함</span>
-                </button>
-                <button id="themeToggle" class="theme-toggle" title="다크/라이트 모드 전환" aria-label="테마 전환">🌙</button>
-            </div>
-        </div>
+        <h1 class="logo" onclick="showSection('home')">토정 살롱</h1>
+        <nav class="nav">
+            <button class="nav-btn active" onclick="showSection('home')">홈</button>
+            <button class="nav-btn" onclick="showSection('match')">인연 궁합</button>
+            <button class="nav-btn" onclick="showSection('faq')">FAQ</button>
+            <button class="nav-btn" onclick="showSection('inquiry')">살롱 문의</button>
+            <button class="nav-btn" onclick="toggleHistoryModal(true)">📜 기록함</button>
+        </nav>
     </header>
 
-    <!-- 메인 컨테이너 -->
-    <main class="main-container">
+    <!-- [섹션 1] 홈 - 내 운세 보기 -->
+    <section id="home" class="section active">
+        <div class="hero">
+            <h2>당신의 오늘을, 살롱에서</h2>
+            <p>사주와 토정비결로 바라보는<br>오늘, 그리고 앞으로의 이야기</p>
+        </div>
 
-        <!-- 서비스 통계 배너 (보너스 2: 방문/이용 통계 지표) -->
-        <aside class="stats-banner">
-            <div class="stat-item">
-                <span class="stat-icon">✨</span>
-                <span class="stat-label">누적 운세 풀이:</span>
-                <strong id="totalFortuneCount" class="stat-value">1,482</strong>회
-            </div>
-            <div class="stat-item">
-                <span class="stat-icon">👥</span>
-                <span class="stat-label">오늘의 살롱 방문:</span>
-                <strong id="todayVisitorCount" class="stat-value">328</strong>명
-            </div>
-            <div class="stat-item highlight">
-                <span class="stat-icon">🌿</span>
-                <span class="stat-label">운세 만족도:</span>
-                <strong class="stat-value">99.4%</strong>
-            </div>
-        </aside>
-
-        <!-- [섹션 1] 홈 - 내 운세 보기 -->
-        <section id="home" class="section active">
-            <div class="hero">
-                <div class="hero-tag">AI TRADITIONAL WISDOM</div>
-                <h2 class="hero-title">당신의 오늘과 내일을,<br><span class="gradient-text">토정 살롱</span>에서 마주하세요</h2>
-                <p class="hero-desc">조선 명리학의 지혜와 최신 AI 기술이 만나<br>당신의 타고난 기운과 1년의 흐름을 따뜻하게 밝혀드립니다.</p>
-                <div class="five-elements">
-                    <span class="element-tag wood">木 성장의 기운</span>
-                    <span class="element-tag fire">火 열정의 기운</span>
-                    <span class="element-tag earth">土 조화의 기운</span>
-                    <span class="element-tag metal">金 결실의 기운</span>
-                    <span class="element-tag water">水 지혜의 기운</span>
-                </div>
+        <div class="card input-card">
+            <h3 class="card-title">내 운세 보기</h3>
+            
+            <div class="form-group">
+                <label for="targetYear">운세를 볼 연도</label>
+                <select id="targetYear">
+                    <option value="2026년">올해 운세 (2026년)</option>
+                    <option value="2027년">내년 운세 (2027년)</option>
+                </select>
             </div>
 
-            <div class="card input-card">
-                <div class="card-header">
-                    <h3 class="card-title">🔮 신년 및 사주 운세 풀이</h3>
-                    <p class="card-subtitle">정확한 분석을 위해 정보를 입력해주세요</p>
-                </div>
-                
-                <form id="fortuneForm" onsubmit="event.preventDefault(); startReading();">
-                    <div class="form-group">
-                        <label for="targetYear">운세를 볼 기준 연도 <span class="required">*</span></label>
-                        <select id="targetYear" class="form-control">
-                            <option value="2026년">2026년 운세 (올해)</option>
-                            <option value="2027년">2027년 운세 (내년)</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="birthDate">생년월일 및 역법 <span class="required">*</span></label>
-                        <div class="input-row">
-                            <input type="date" id="birthDate" class="form-control" min="1930-01-01" max="2029-12-31" required>
-                            <select id="calendarType" class="form-control calendar-select">
-                                <option value="solar">양력</option>
-                                <option value="lunar">음력(평달)</option>
-                                <option value="lunar-leap">음력(윤달)</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>성별 <span class="required">*</span></label>
-                        <div class="radio-group">
-                            <label class="radio-label">
-                                <input type="radio" name="gender" value="male" checked>
-                                <span class="radio-custom"></span> 남성
-                            </label>
-                            <label class="radio-label">
-                                <input type="radio" name="gender" value="female">
-                                <span class="radio-custom"></span> 여성
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="birthHour">태어난 시 (선택사항)</label>
-                        <select id="birthHour" class="form-control">
-                            <option value="">모름 / 태어난 시 미선택</option>
-                            <option value="자시">자시(子時) 23:30 ~ 01:29</option>
-                            <option value="축시">축시(丑時) 01:30 ~ 03:29</option>
-                            <option value="인시">인시(寅時) 03:30 ~ 05:29</option>
-                            <option value="묘시">묘시(卯時) 05:30 ~ 07:29</option>
-                            <option value="진시">진시(辰時) 07:30 ~ 09:29</option>
-                            <option value="사시">사시(巳時) 09:30 ~ 11:29</option>
-                            <option value="오시">오시(午時) 11:30 ~ 13:29</option>
-                            <option value="미시">미시(未時) 13:30 ~ 15:29</option>
-                            <option value="신시">신시(申時) 15:30 ~ 17:29</option>
-                            <option value="유시">유시(酉時) 17:30 ~ 19:29</option>
-                            <option value="술시">술시(戌時) 19:30 ~ 21:29</option>
-                            <option value="해시">해시(亥時) 21:30 ~ 23:29</option>
-                        </select>
-                        <small class="form-hint">💡 시간을 모르셔도 연월일 3가지 기운으로 깊이 있는 풀이가 진행됩니다.</small>
-                    </div>
-
-                    <button type="submit" class="btn-main" id="readingBtn">
-                        <span class="btn-text">✨ AI 운세 풀이 시작하기</span>
-                        <span class="btn-spinner" style="display:none;"></span>
-                    </button>
-                </form>
-            </div>
-
-            <!-- 결과 표시 카드 -->
-            <div class="card result-card" id="resultCard" style="display:none;">
-                <div id="loadingState" class="loading-box" style="display:none;">
-                    <div class="spinner-ring"></div>
-                    <p class="loading-title">🔮 당신의 사주와 기운을 정밀 분석하고 있습니다...</p>
-                    <p id="loadingTimerMsg" class="loading-sub">방대한 토정비결 원전과 오행 데이터를 조율 중입니다.</p>
-                </div>
-
-                <div id="errorState" class="error-box" style="display:none;">
-                    <div class="error-icon">⚠️</div>
-                    <h4 class="error-title">운세 분석 중 문제가 발생했습니다</h4>
-                    <p id="errorMessage" class="error-desc"></p>
-                    <button class="btn-retry" onclick="startReading()">🔄 다시 시도하기</button>
-                </div>
-
-                <div id="resultContent" style="display:none;">
-                    <div class="result-header">
-                        <div class="result-badge">풀이 완료</div>
-                        <h3 class="result-main-title" id="resultTitle">2026년 운세 리포트</h3>
-                        <div class="result-meta" id="resultMeta"></div>
-                    </div>
-                    <div id="resultText" class="result-text markdown-body"></div>
-                    
-                    <div class="result-actions">
-                        <button class="action-sub-btn" onclick="copyResultText('resultText')">📋 텍스트 복사</button>
-                        <button class="action-sub-btn" onclick="downloadResultAsJSON()">💾 JSON 저장</button>
-                        <button class="action-sub-btn highlight" id="shareBtn">🔗 결과 공유하기</button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- [섹션 2] 인연 궁합 -->
-        <section id="match" class="section">
-            <div class="hero">
-                <div class="hero-tag">RELATIONSHIP HARMONY</div>
-                <h2 class="hero-title">두 사람의 인연과 기운,<br><span class="gradient-text">따뜻한 궁합</span>으로 살펴봅니다</h2>
-                <p class="hero-desc">연인, 썸, 친구, 비즈니스 파트너까지<br>서로의 시너지와 갈등을 지혜롭게 풀어가는 대화법을 제안합니다.</p>
-            </div>
-
-            <div class="match-grid">
-                <!-- 나의 정보 -->
-                <div class="card input-card">
-                    <h3 class="card-title">👤 나의 정보</h3>
-                    <div class="form-group">
-                        <label for="myBirthDate">생년월일 <span class="required">*</span></label>
-                        <div class="input-row">
-                            <input type="date" id="myBirthDate" class="form-control" min="1930-01-01" max="2029-12-31" required>
-                            <select id="myCalendarType" class="form-control calendar-select">
-                                <option value="solar">양력</option>
-                                <option value="lunar">음력(평달)</option>
-                                <option value="lunar-leap">음력(윤달)</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>성별</label>
-                        <div class="radio-group">
-                            <label class="radio-label"><input type="radio" name="myGender" value="male" checked><span class="radio-custom"></span> 남성</label>
-                            <label class="radio-label"><input type="radio" name="myGender" value="female"><span class="radio-custom"></span> 여성</label>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 상대방 정보 -->
-                <div class="card input-card">
-                    <h3 class="card-title">👥 상대방 정보</h3>
-                    <div class="form-group">
-                        <label for="partnerBirthDate">생년월일 <span class="required">*</span></label>
-                        <div class="input-row">
-                            <input type="date" id="partnerBirthDate" class="form-control" min="1930-01-01" max="2029-12-31" required>
-                            <select id="partnerCalendarType" class="form-control calendar-select">
-                                <option value="solar">양력</option>
-                                <option value="lunar">음력(평달)</option>
-                                <option value="lunar-leap">음력(윤달)</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>성별</label>
-                        <div class="radio-group">
-                            <label class="radio-label"><input type="radio" name="partnerGender" value="female" checked><span class="radio-custom"></span> 여성</label>
-                            <label class="radio-label"><input type="radio" name="partnerGender" value="male"><span class="radio-custom"></span> 남성</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 관계 유형 및 버튼 -->
-            <div class="card input-card match-footer-card">
-                <div class="form-group">
-                    <label for="relationType">관계 유형 선택 <span class="required">*</span></label>
-                    <select id="relationType" class="form-control">
-                        <option value="연인">❤️ 연인 (커플, 부부)</option>
-                        <option value="썸">🌱 썸 (호감을 갖고 알아가는 단계)</option>
-                        <option value="친구">☕ 친구 (오랜 친구, 절친한 동성/이성 친구)</option>
-                        <option value="동료">💼 직장 동료 / 비즈니스 파트너</option>
+            <div class="form-group">
+                <label for="birthDate">생년월일</label>
+                <div class="input-row">
+                    <input type="date" id="birthDate" min="1930-01-01" max="2029-12-31">
+                    <select id="calendarType">
+                        <option value="solar">양력</option>
+                        <option value="lunar">음력(평달)</option>
+                        <option value="lunar-leap">음력(윤달)</option>
                     </select>
                 </div>
-                <button class="btn-main" id="matchBtn" onclick="startMatchReading()">
-                    <span class="btn-text">💞 두 사람의 인연 궁합 풀이 시작</span>
-                    <span class="btn-spinner" style="display:none;"></span>
-                </button>
             </div>
 
-            <!-- 궁합 결과 카드 -->
-            <div class="card result-card" id="matchResultCard" style="display:none;">
-                <div id="matchLoadingState" class="loading-box" style="display:none;">
-                    <div class="spinner-ring"></div>
-                    <p class="loading-title">💫 두 분의 사주 기운과 시너지를 분석 중입니다...</p>
-                    <p id="matchLoadingTimerMsg" class="loading-sub">서로를 북돋아주는 조화의 흐름을 조율하고 있습니다.</p>
-                </div>
-
-                <div id="matchErrorState" class="error-box" style="display:none;">
-                    <div class="error-icon">⚠️</div>
-                    <h4 class="error-title">궁합 분석 중 문제가 발생했습니다</h4>
-                    <p id="matchErrorMessage" class="error-desc"></p>
-                    <button class="btn-retry" onclick="startMatchReading()">🔄 다시 시도하기</button>
-                </div>
-
-                <div id="matchResultContent" style="display:none;">
-                    <div class="result-header">
-                        <div class="result-badge">궁합 리포트</div>
-                        <h3 class="result-main-title" id="matchResultTitle">우리의 인연 궁합</h3>
-                    </div>
-                    <div id="matchResultText" class="result-text markdown-body"></div>
-                    
-                    <div class="result-actions">
-                        <button class="action-sub-btn" onclick="copyResultText('matchResultText')">📋 텍스트 복사</button>
-                        <button class="action-sub-btn highlight" id="matchShareBtn">🔗 궁합 결과 공유하기</button>
-                    </div>
+            <div class="form-group">
+                <label>성별</label>
+                <div class="radio-group">
+                    <label class="radio-label"><input type="radio" name="gender" value="male" checked> 남성</label>
+                    <label class="radio-label"><input type="radio" name="gender" value="female"> 여성</label>
                 </div>
             </div>
-        </section>
 
-        <!-- [섹션 3] FAQ (자주 묻는 질문) -->
-        <section id="faq" class="section">
-            <div class="hero">
-                <div class="hero-tag">HELP & FAQ</div>
-                <h2 class="hero-title">토정 살롱 <span class="gradient-text">자주 묻는 질문</span></h2>
-                <p class="hero-desc">사주와 AI 해석에 대해 궁금하셨던 점을 알기 쉽게 정리했습니다.</p>
+            <div class="form-group">
+                <label for="birthHour">태어난 시 <span class="optional">(선택)</span></label>
+                <select id="birthHour">
+                    <option value="">모름 / 선택 안 함</option>
+                    <option value="자시">자시(子時) (23:00~01:00)</option>
+                    <option value="축시">축시(丑時) (01:00~03:00)</option>
+                    <option value="인시">인시(寅時) (03:00~05:00)</option>
+                    <option value="묘시">묘시(卯時) (05:00~07:00)</option>
+                    <option value="진시">진시(辰時) (07:00~09:00)</option>
+                    <option value="사시">사시(巳時) (09:00~11:00)</option>
+                    <option value="오시">오시(午時) (11:00~13:00)</option>
+                    <option value="미시">미시(未時) (13:00~15:00)</option>
+                    <option value="신시">신시(申時) (15:00~17:00)</option>
+                    <option value="유시">유시(酉時) (17:00~19:00)</option>
+                    <option value="술시">술시(戌時) (19:00~21:00)</option>
+                    <option value="해시">해시(亥時) (21:00~23:00)</option>
+                </select>
             </div>
 
-            <div class="faq-accordion">
-                <div class="faq-item">
-                    <button class="faq-question" onclick="toggleFaq(this)">
-                        <span>Q. 사주와 토정비결은 어떤 점이 다른가요?</span>
-                        <span class="faq-toggle-icon">+</span>
-                    </button>
-                    <div class="faq-answer">
-                        <p><strong>사주팔자</strong>는 태어난 연·월·일·시 4기둥을 바탕으로 평생의 기운과 성향의 큰 줄기를 분석하는 명리학 체계입니다.<br><strong>토정비결</strong>은 조선 중기 토정 이지함 선생의 지혜를 바탕으로 '특정 1년(12개월)' 동안의 세부적인 길흉과 월별 흐름을 짚어보는 비결서입니다. 토정 살롱은 두 체계를 조화롭게 융합하여 해석합니다.</p>
-                    </div>
-                </div>
+            <button class="btn-main" id="readingBtn" onclick="startReading()">✨ 운세 풀이 시작하기</button>
+        </div>
 
-                <div class="faq-item">
-                    <button class="faq-question" onclick="toggleFaq(this)">
-                        <span>Q. 불길한 운세나 불안을 조장하지 않나요?</span>
-                        <span class="faq-toggle-icon">+</span>
-                    </button>
-                    <div class="faq-answer">
-                        <p>토정 살롱은 <strong>'공포 조장 금지'</strong>와 <strong>'건설적인 실천 솔루션 제공'</strong>을 제1원칙으로 합니다. 주의가 필요한 운의 흐름이 있더라도 비관하거나 단정 짓지 않고, 마찰을 줄이고 슬기롭게 넘길 수 있는 대화법과 마음가짐 팁을 다정하게 제안합니다.</p>
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <button class="faq-question" onclick="toggleFaq(this)">
-                        <span>Q. 태어난 시(시간)를 몰라도 정확한가요?</span>
-                        <span class="faq-toggle-icon">+</span>
-                    </button>
-                    <div class="faq-answer">
-                        <p>네, 가능합니다. 태어난 시를 모르시더라도 생년·월·일의 삼주(三柱) 6글자 기운을 바탕으로도 충분히 높은 신뢰도의 성향 및 1년 운세 풀이가 생성됩니다. 태어난 시를 아실 경우 보다 정밀한 말년/자녀운 흐름이 보강됩니다.</p>
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <button class="faq-question" onclick="toggleFaq(this)">
-                        <span>Q. 입력한 개인정보(생년월일)는 안전하게 보호되나요?</span>
-                        <span class="faq-toggle-icon">+</span>
-                    </button>
-                    <div class="faq-answer">
-                        <p>네! 토정 살롱은 사용자의 생년월일 정보를 영구 서버 데이터베이스에 수집·저장하지 않으며, AI 분석 요청 시 1회성으로만 안전하게 암호화 전송됩니다. 지난 풀이 내역은 오직 사용자의 브라우저(LocalStorage)에만 안전하게 저장됩니다.</p>
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <button class="faq-question" onclick="toggleFaq(this)">
-                        <span>Q. 인연 궁합은 연인 관계만 볼 수 있나요?</span>
-                        <span class="faq-toggle-icon">+</span>
-                    </button>
-                    <div class="faq-answer">
-                        <p>아닙니다. 연인/부부뿐만 아니라 <strong>썸 타는 관계, 친구 관계, 직장 동료 및 비즈니스 파트너</strong>까지 각 관계 역학에 맞춘 최적의 시너지와 소통 가이드를 제공합니다.</p>
-                    </div>
+        <div class="card result-card" id="resultCard" style="display:none;">
+            <div id="loadingState">
+                <p class="loading-text" id="fortuneLoadingText">🔮 잠시, 당신의 운을 들여다보고 있습니다...</p>
+            </div>
+            <div id="resultContent" style="display:none;">
+                <h3 class="card-title" id="resultTitle">2026년 운세 리포트</h3>
+                <div id="resultText" class="result-text"></div>
+                <div class="action-row">
+                    <button class="share-btn" onclick="copyResultText('resultText')">📋 복사하기</button>
+                    <button class="share-btn" onclick="downloadResultAsJSON()">💾 JSON 저장</button>
+                    <button class="share-btn" id="shareBtn">🔗 공유하기</button>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- [섹션 4] 살롱 문의 및 방명록 (보너스 과제 1: 운영 자동화 연동) -->
-        <section id="inquiry" class="section">
-            <div class="hero">
-                <div class="hero-tag">GUESTBOOK & INQUIRY</div>
-                <h2 class="hero-title">살롱 마스터에게 <span class="gradient-text">문의하기</span></h2>
-                <p class="hero-desc">1:1 심층 사주 상담 신청, 서비스 개선 건의, 제휴 문의를 남겨주시면<br>토정 살롱 매니저에게 실시간 알림이 전송되어 신속히 안내해 드립니다.</p>
-            </div>
+    <!-- [섹션 2] 인연 궁합 -->
+    <section id="match" class="section">
+        <div class="hero">
+            <h2>인연 궁합</h2>
+            <p>두 사람의 인연을 따뜻하게 살펴봅니다</p>
+        </div>
 
-            <div class="card input-card inquiry-card">
-                <form id="inquiryForm" onsubmit="event.preventDefault(); submitInquiry();">
-                    <div class="form-group">
-                        <label for="inquiryCategory">문의 분야 <span class="required">*</span></label>
-                        <select id="inquiryCategory" class="form-control">
-                            <option value="1:1 심층 명리 상담 신청">🔮 1:1 심층 명리 상담 신청</option>
-                            <option value="서비스 이용 의견 및 개선 제안">💡 서비스 이용 의견 및 개선 제안</option>
-                            <option value="기업/이벤트 제휴 문의">🤝 기업 / 이벤트 제휴 문의</option>
-                            <option value="기타 문의">📝 기타 문의</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="inquiryName">이름 / 닉네임 <span class="required">*</span></label>
-                        <input type="text" id="inquiryName" class="form-control" placeholder="성함 또는 닉네임을 입력하세요" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="inquiryContact">연락처 (이메일 또는 전화번호) <span class="required">*</span></label>
-                        <input type="text" id="inquiryContact" class="form-control" placeholder="답변받으실 이메일 주소나 연락처" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="inquiryMessage">문의 내용 / 남기실 말씀 <span class="required">*</span></label>
-                        <textarea id="inquiryMessage" class="form-control textarea" rows="4" placeholder="상담 희망 시간 또는 구체적인 문의 내용을 작성해주세요." required></textarea>
-                    </div>
-
-                    <button type="submit" class="btn-main" id="inquiryBtn">
-                        <span class="btn-text">📨 문의 및 상담 신청 전송</span>
-                        <span class="btn-spinner" style="display:none;"></span>
-                    </button>
-                </form>
-
-                <div id="inquirySuccessBox" class="inquiry-success" style="display:none;">
-                    <div class="success-icon">🎉</div>
-                    <h4 class="success-title">문의가 성공적으로 접수되었습니다!</h4>
-                    <p class="success-desc">접수 번호: <strong id="inquiryIdDisplay"></strong></p>
-                    <p class="success-sub">남겨주신 연락처로 검토 후 친절히 안내해 드리겠습니다.</p>
+        <div class="card input-card match-person-card">
+            <h3 class="card-title">나의 정보</h3>
+            <div class="form-group">
+                <label for="myBirthDate">생년월일</label>
+                <div class="input-row">
+                    <input type="date" id="myBirthDate" min="1930-01-01" max="2029-12-31">
+                    <select id="myCalendarType">
+                        <option value="solar">양력</option>
+                        <option value="lunar">음력(평달)</option>
+                        <option value="lunar-leap">음력(윤달)</option>
+                    </select>
                 </div>
             </div>
-        </section>
+            <div class="form-group">
+                <label>성별</label>
+                <div class="radio-group">
+                    <label class="radio-label"><input type="radio" name="myGender" value="male" checked> 남성</label>
+                    <label class="radio-label"><input type="radio" name="myGender" value="female"> 여성</label>
+                </div>
+            </div>
+        </div>
 
-    </main>
+        <div class="card input-card match-person-card">
+            <h3 class="card-title">상대방 정보</h3>
+            <div class="form-group">
+                <label for="partnerBirthDate">생년월일</label>
+                <div class="input-row">
+                    <input type="date" id="partnerBirthDate" min="1930-01-01" max="2029-12-31">
+                    <select id="partnerCalendarType">
+                        <option value="solar">양력</option>
+                        <option value="lunar">음력(평달)</option>
+                        <option value="lunar-leap">음력(윤달)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>성별</label>
+                <div class="radio-group">
+                    <label class="radio-label"><input type="radio" name="partnerGender" value="female" checked> 여성</label>
+                    <label class="radio-label"><input type="radio" name="partnerGender" value="male"> 남성</label>
+                </div>
+            </div>
+            <div class="match-relation">
+                <div class="form-group">
+                    <label for="relationType">관계 유형</label>
+                    <select id="relationType">
+                        <option value="연인">연인 (커플, 부부)</option>
+                        <option value="썸">썸 (알아가는 중)</option>
+                        <option value="친구">친구 (동성, 이성)</option>
+                        <option value="동료">직장 동료 / 비즈니스</option>
+                    </select>
+                </div>
+                <button class="btn-main" id="matchBtn" onclick="startMatchReading()">💞 궁합 풀이 시작하기</button>
+            </div>
+        </div>
 
-    <!-- [모달] 나의 운세 서재 / 기록함 (보너스 1: LocalStorage 데이터 저장) -->
+        <div class="card result-card" id="matchResultCard" style="display:none;">
+            <div id="matchLoadingState">
+                <p class="loading-text" id="matchLoadingText">💫 두 분의 인연을 천천히 들여다보는 중입니다...</p>
+            </div>
+            <div id="matchResultContent" style="display:none;">
+                <h3 class="card-title" id="matchResultTitle">우리의 인연 궁합 리포트</h3>
+                <div id="matchResultText" class="result-text"></div>
+                <div class="action-row">
+                    <button class="share-btn" onclick="copyResultText('matchResultText')">📋 복사하기</button>
+                    <button class="share-btn" id="matchShareBtn">🔗 궁합 결과 공유하기</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- [섹션 3] 자주 묻는 질문 (FAQ) -->
+    <section id="faq" class="section">
+        <div class="hero">
+            <h2>자주 묻는 질문</h2>
+            <p>토정 살롱에 대해 궁금한 점을 모았어요</p>
+        </div>
+        <div class="faq-list">
+            <div class="card faq-item">
+                <h4 class="faq-q">사주와 토정비결의 차이가 뭔가요?</h4>
+                <p class="faq-a">사주는 태어난 연월일시를 바탕으로 평생의 큰 흐름과 타고난 성향을 분석하고, 토정비결은 그중에서도 '올해 1년'의 구체적인 운세를 짚어봅니다. 토정 살롱은 이 두 가지를 조화롭게 엮어 종합적인 조언을 해드립니다.</p>
+            </div>
+            <div class="card faq-item">
+                <h4 class="faq-q">운세가 안 좋게 나올까 봐 걱정돼요.</h4>
+                <p class="faq-a">걱정하지 않으셔도 됩니다. 토정 살롱은 길흉화복을 단정 짓고 공포를 주지 않습니다. 혹여 조심해야 할 시기가 있다면, 어떻게 현명하고 슬기롭게 넘길 수 있을지 다정하고 실용적인 방향성을 제시해 드립니다.</p>
+            </div>
+            <div class="card faq-item">
+                <h4 class="faq-q">인연 궁합은 연인끼리만 볼 수 있나요?</h4>
+                <p class="faq-a">아닙니다! 연인이나 부부는 물론, 썸 타는 사이, 친한 동성 친구, 심지어 직장 동료와의 관계까지 살펴볼 수 있습니다. 두 사람의 기운이 어떻게 어우러지는지 관계 유형에 맞춰 풀이해 드립니다.</p>
+            </div>
+            <div class="card faq-item">
+                <h4 class="faq-q">진짜 AI가 분석해 주는 건가요?</h4>
+                <p class="faq-a">네, 입력하신 정보를 바탕으로 AI가 맞춤형 리포트를 작성합니다. 정해진 문장을 그대로 출력하는 것이 아닌, 입력 내용에 맞춰 새로운 풀이를 생성합니다.</p>
+            </div>
+            <div class="card faq-item">
+                <h4 class="faq-q">입력한 생년월일은 저장되나요?</h4>
+                <p class="faq-a">입력하신 정보는 운세 풀이를 위한 일회성 요청에만 사용되며, 영구 서버 DB에는 보관되지 않습니다. 지난 운세는 본인 브라우저(LocalStorage)에서만 안전하게 다시 확인하실 수 있습니다.</p>
+            </div>
+            <div class="card faq-item">
+                <h4 class="faq-q">태어난 시를 모르면 어떻게 하나요?</h4>
+                <p class="faq-a">태어난 시(시간)는 선택 사항입니다. 시간을 모르신다면 '선택 안 함'으로 두고 진행하셔도 연월일 3가지를 바탕으로 충분히 깊이 있는 풀이를 받아보실 수 있습니다.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- [섹션 4] 살롱 문의 & 방명록 (보너스 과제 1) -->
+    <section id="inquiry" class="section">
+        <div class="hero">
+            <h2>살롱 문의</h2>
+            <p>1:1 심층 상담 신청 및 소중한 의견을 남겨주세요</p>
+        </div>
+
+        <div class="card input-card">
+            <h3 class="card-title">문의 및 상담 신청</h3>
+            <form id="inquiryForm" onsubmit="event.preventDefault(); submitInquiry();">
+                <div class="form-group">
+                    <label for="inquiryCategory">문의 유형</label>
+                    <select id="inquiryCategory">
+                        <option value="1:1 심층 사주 상담 신청">1:1 심층 사주 상담 신청</option>
+                        <option value="서비스 개선 의견">서비스 개선 및 기능 제안</option>
+                        <option value="제휴 및 기타 문의">제휴 및 기타 문의</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="inquiryName">성함 / 닉네임</label>
+                    <input type="text" id="inquiryName" placeholder="성함 또는 닉네임을 입력하세요" required>
+                </div>
+                <div class="form-group">
+                    <label for="inquiryContact">연락처</label>
+                    <input type="text" id="inquiryContact" placeholder="답변 받으실 이메일 또는 연락처" required>
+                </div>
+                <div class="form-group">
+                    <label for="inquiryMessage">문의 내용</label>
+                    <textarea id="inquiryMessage" placeholder="남기실 말씀을 편하게 적어주세요" required></textarea>
+                </div>
+                <button type="submit" class="btn-main" id="inquiryBtn">📨 문의 접수하기</button>
+            </form>
+
+            <div id="inquirySuccess" style="display:none; text-align:center; padding: 20px 0;">
+                <p style="font-size:20px; font-weight:600; margin-bottom:8px;">✨ 문의가 접수되었습니다</p>
+                <p id="inquiryIdText" style="color:var(--text-muted); font-size:14px; margin-bottom:12px;"></p>
+                <p style="font-size:15px; color:var(--text-color);">살롱 매니저가 확인 후 연락드리겠습니다.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- [모달] 나의 운세 기록함 (보너스 1) -->
     <div id="historyModal" class="modal-backdrop" style="display:none;" onclick="if(event.target===this) toggleHistoryModal(false)">
         <div class="modal-card">
             <div class="modal-header">
-                <h3>📜 나의 운세 서재 (최근 풀이 기록)</h3>
+                <h3>📜 나의 운세 기록함</h3>
                 <button class="modal-close" onclick="toggleHistoryModal(false)">✕</button>
             </div>
             <div class="modal-body">
-                <p class="modal-hint">이 브라우저에 저장된 최근 운세 풀이 내역입니다.</p>
-                <div id="historyList" class="history-list">
-                    <!-- JS로 동적 렌더링 -->
-                </div>
+                <div id="historyList"></div>
             </div>
             <div class="modal-footer">
-                <button class="action-sub-btn" onclick="clearAllHistory()">🗑️ 전체 기록 삭제</button>
-                <button class="btn-primary-small" onclick="toggleHistoryModal(false)">닫기</button>
+                <button onclick="clearAllHistory()">전체 삭제</button>
+                <button class="primary" onclick="toggleHistoryModal(false)">닫기</button>
             </div>
         </div>
     </div>
 
     <!-- 푸터 -->
     <footer class="footer">
-        <div class="footer-container">
-            <div class="footer-brand">
-                <h4>토정 살롱 (Tojeong Salon)</h4>
-                <p>전통 사주 명리학과 토정비결의 지혜를 현대적인 인공지능 기술로 재해석합니다.</p>
-            </div>
-            <div class="footer-links">
-                <span>버전 2.0 (AI Native Web Service)</span>
-                <span>·</span>
-                <span>제작: AI 웹 개발 프로젝트</span>
-            </div>
-            <div class="footer-copyright">
-                <p>© 2026 토정 살롱. All rights reserved. 본 운세 해석은 참고용으로 제공됩니다.</p>
-            </div>
-        </div>
+        <p>토정 살롱 · Traditional Wisdom, Modern Insight</p>
     </footer>
 
     <script src="script.js"></script>
