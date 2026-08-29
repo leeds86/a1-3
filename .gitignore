@@ -1,4 +1,4 @@
-﻿# Environment variables & Secrets
+# Environment variables & Secrets
 .env
 .env.local
 .env.*.local
