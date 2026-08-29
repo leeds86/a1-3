@@ -287,7 +287,24 @@ async function submitInquiry() {
 }
 
 // ========================================
-// 7. 결과 마크다운 포맷팅
+// 7. FAQ 아코디언 토글 (+ 버튼)
+// ========================================
+function toggleFaq(button) {
+    const item = button.closest('.faq-item');
+    if (!item) return;
+    const isActive = item.classList.contains('active');
+
+    // 다른 항목 닫기
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+
+    // 클릭된 항목 토글
+    if (!isActive) {
+        item.classList.add('active');
+    }
+}
+
+// ========================================
+// 8. 결과 마크다운 포맷팅
 // ========================================
 function formatResult(text) {
     if (!text) return '';
@@ -303,7 +320,7 @@ function formatResult(text) {
 }
 
 // ========================================
-// 8. 로컬스토리지 기록 관리 (보너스 1)
+// 9. 로컬스토리지 기록 관리 (보너스 1)
 // ========================================
 const HISTORY_KEY = 'tojeong_fortune_history';
 
@@ -384,7 +401,7 @@ function clearAllHistory() {
 }
 
 // ========================================
-// 9. 복사, JSON 다운로드, 공유
+// 10. 복사, JSON 다운로드, 공유
 // ========================================
 function copyResultText(id) {
     const text = document.getElementById(id).innerText;
