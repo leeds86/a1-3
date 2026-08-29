@@ -398,16 +398,6 @@ function copyResultText(id) {
     });
 }
 
-function downloadResultAsJSON() {
-    if (!currentFortuneResult) return;
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(currentFortuneResult, null, 2));
-    const a = document.createElement('a');
-    a.href = dataStr;
-    a.download = `tojeong_${Date.now()}.json`;
-    a.click();
-    showToast('💾 JSON 파일이 저장되었습니다.');
-}
-
 function setupShareButtons() {
     const shareBtn = document.getElementById('shareBtn');
     const matchShareBtn = document.getElementById('matchShareBtn');
