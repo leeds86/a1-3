@@ -378,10 +378,21 @@ function clearAllHistory() {
 // 10. 복사, JSON 다운로드, 공유
 // ========================================
 function copyResultText(id) {
-    const text = document.getElementById(id).innerText;
-    if (!text) return;
-    navigator.clipboard.writeText(text).then(() => {
-        showToast('📋 내용이 복사되었습니다.');
+    const element = document.getElementById(id);
+    if (!element) return;
+    const text = element.innerText;
+    if (!text) {
+        showToast('복사할 내용이 없습니다.');
+        return;
+    }
+    
+    const isMatch = id === 'matchResultText';
+    const titleEl = document.getElementById(isMatch ? 'matchResultTitle' : 'resultTitle');
+    const title = titleEl ? titleEl.textContent : '토정 살롱 운세 리포트';
+    const fullText = `[토정 살롱 🏛️] ${title}\n\n${text}\n\n👉 토정 살롱: ${window.location.origin}`;
+
+    navigator.clipboard.writeText(fullText).then(() => {
+        showToast('📋 전체 내용이 클립보드에 복사되었습니다.');
     }).catch(() => {
         showToast('복사에 실패했습니다.');
     });
@@ -419,16 +430,33 @@ function setupShareButtons() {
 }
 
 async function handleShare(title, text) {
+    if (!text) {
+        showToast('공유할 내용이 없습니다.');
+        return;
+    }
+
+    const fullShareText = `[토정 살롱 🏛️] ${title}\n\n${text}\n\n👉 토정 살롱에서 확인해보세요: ${window.location.origin}`;
+
     if (navigator.share) {
         try {
             await navigator.share({
                 title: `[토정 살롱] ${title}`,
-                text: `${title}\n\n${text.substring(0, 300)}...`
+                text: fullShareText,
+                url: window.location.href
             });
+            showToast('✨ 공유창을 열었습니다.');
         } catch (e) {
-            if (e.name !== 'AbortError') copyResultText('resultText');
+            if (e.name !== 'AbortError') {
+                navigator.clipboard.writeText(fullShareText).then(() => {
+                    showToast('📋 전체 내용이 클립보드에 복사되었습니다.');
+                });
+            }
         }
     } else {
-        copyResultText('resultText');
+        navigator.clipboard.writeText(fullShareText).then(() => {
+            showToast('📋 전체 내용이 클립보드에 복사되었습니다.');
+        }).catch(() => {
+            showToast('복사에 실패했습니다.');
+        });
     }
 }
