@@ -39,9 +39,9 @@ h1, h2, h3, h4, .logo { font-family: 'MaruBuri', serif; letter-spacing: -0.5px; 
 
 /* Header */
 .header {
-    background: rgba(220, 230, 226, 0.78);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    background: rgba(220, 230, 226, 0.35);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--card-border);
     padding: 16px 40px;
     display: flex;
@@ -50,12 +50,8 @@ h1, h2, h3, h4, .logo { font-family: 'MaruBuri', serif; letter-spacing: -0.5px; 
     position: sticky;
     top: 0;
     z-index: 100;
+    box-shadow: 0 4px 20px rgba(32, 58, 54, 0.03);
     transition: background 0.3s ease, border-color 0.3s ease;
-}
-
-body.dark .header {
-    background: rgba(18, 33, 31, 0.82);
-    border-bottom: 1px solid var(--card-border);
 }
 
 .logo { 
