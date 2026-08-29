@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
@@ -109,66 +109,69 @@
             <p>두 사람의 인연을 따뜻하게 살펴봅니다</p>
         </div>
 
-        <!-- 1) 나와 상대방 정보 (2단 그리드 카드) -->
-        <div class="match-grid">
-            <div class="card input-card match-person-card">
-                <h3 class="card-title">나의 정보</h3>
-                <div class="form-group">
-                    <label for="myBirthDate">생년월일</label>
-                    <div class="input-row">
-                        <input type="date" id="myBirthDate" min="1930-01-01" max="2029-12-31">
-                        <select id="myCalendarType">
-                            <option value="solar">양력</option>
-                            <option value="lunar">음력(평달)</option>
-                            <option value="lunar-leap">음력(윤달)</option>
-                        </select>
+        <!-- 궁합 입력 컨테이너 (3개 카드 완벽 가로 정렬) -->
+        <div class="match-form-container">
+            <!-- 1) 나와 상대방 정보 (2단 그리드 카드) -->
+            <div class="match-grid">
+                <div class="card input-card match-person-card">
+                    <h3 class="card-title">나의 정보</h3>
+                    <div class="form-group">
+                        <label for="myBirthDate">생년월일</label>
+                        <div class="input-row">
+                            <input type="date" id="myBirthDate" min="1930-01-01" max="2029-12-31">
+                            <select id="myCalendarType">
+                                <option value="solar">양력</option>
+                                <option value="lunar">음력(평달)</option>
+                                <option value="lunar-leap">음력(윤달)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>성별</label>
+                        <div class="radio-group">
+                            <label class="radio-label"><input type="radio" name="myGender" value="male" checked> 남성</label>
+                            <label class="radio-label"><input type="radio" name="myGender" value="female"> 여성</label>
+                        </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label>성별</label>
-                    <div class="radio-group">
-                        <label class="radio-label"><input type="radio" name="myGender" value="male" checked> 남성</label>
-                        <label class="radio-label"><input type="radio" name="myGender" value="female"> 여성</label>
+
+                <div class="card input-card match-person-card">
+                    <h3 class="card-title">상대방 정보</h3>
+                    <div class="form-group">
+                        <label for="partnerBirthDate">생년월일</label>
+                        <div class="input-row">
+                            <input type="date" id="partnerBirthDate" min="1930-01-01" max="2029-12-31">
+                            <select id="partnerCalendarType">
+                                <option value="solar">양력</option>
+                                <option value="lunar">음력(평달)</option>
+                                <option value="lunar-leap">음력(윤달)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>성별</label>
+                        <div class="radio-group">
+                            <label class="radio-label"><input type="radio" name="partnerGender" value="female" checked> 여성</label>
+                            <label class="radio-label"><input type="radio" name="partnerGender" value="male"> 남성</label>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="card input-card match-person-card">
-                <h3 class="card-title">상대방 정보</h3>
+            <!-- 2) 관계 유형 및 풀이 시작 카드 (3번째 카드) -->
+            <div class="card input-card match-relation-card">
+                <h3 class="card-title">관계 설정</h3>
                 <div class="form-group">
-                    <label for="partnerBirthDate">생년월일</label>
-                    <div class="input-row">
-                        <input type="date" id="partnerBirthDate" min="1930-01-01" max="2029-12-31">
-                        <select id="partnerCalendarType">
-                            <option value="solar">양력</option>
-                            <option value="lunar">음력(평달)</option>
-                            <option value="lunar-leap">음력(윤달)</option>
-                        </select>
-                    </div>
+                    <label for="relationType">두 사람의 관계 유형</label>
+                    <select id="relationType">
+                        <option value="연인">연인 (커플, 부부)</option>
+                        <option value="썸">썸 (호감을 갖고 알아가는 사이)</option>
+                        <option value="친구">친구 (동성, 절친한 친구)</option>
+                        <option value="동료">직장 동료 / 비즈니스 파트너</option>
+                    </select>
                 </div>
-                <div class="form-group">
-                    <label>성별</label>
-                    <div class="radio-group">
-                        <label class="radio-label"><input type="radio" name="partnerGender" value="female" checked> 여성</label>
-                        <label class="radio-label"><input type="radio" name="partnerGender" value="male"> 남성</label>
-                    </div>
-                </div>
+                <button class="btn-main" id="matchBtn" onclick="startMatchReading()">💞 궁합 풀이 시작하기</button>
             </div>
-        </div>
-
-        <!-- 2) 관계 유형 및 풀이 시작 카드 (3번째 카드) -->
-        <div class="card input-card match-relation-card">
-            <h3 class="card-title">관계 설정</h3>
-            <div class="form-group">
-                <label for="relationType">두 사람의 관계 유형</label>
-                <select id="relationType">
-                    <option value="연인">연인 (커플, 부부)</option>
-                    <option value="썸">썸 (호감을 갖고 알아가는 사이)</option>
-                    <option value="친구">친구 (동성, 절친한 친구)</option>
-                    <option value="동료">직장 동료 / 비즈니스 파트너</option>
-                </select>
-            </div>
-            <button class="btn-main" id="matchBtn" onclick="startMatchReading()">💞 궁합 풀이 시작하기</button>
         </div>
 
         <!-- 궁합 결과 카드 -->
