@@ -1,4 +1,4 @@
-﻿/**
+/**
  * 토정 살롱 (Tojeong Salon) - Client Script
  */
 
@@ -6,7 +6,6 @@ let currentFortuneResult = null;
 let currentMatchResult = null;
 
 document.addEventListener('DOMContentLoaded', () => {
-    initTheme();
     setupShareButtons();
 });
 
@@ -25,31 +24,6 @@ function showSection(id) {
 
     const matchedNav = Array.from(document.querySelectorAll('.nav-btn')).find(b => b.getAttribute('onclick')?.includes(id));
     if (matchedNav) matchedNav.classList.add('active');
-}
-
-// ========================================
-// 2. 다크모드 토글 (플로팅 버튼 & 로컬스토리지)
-// ========================================
-function initTheme() {
-    const themeToggle = document.getElementById('themeToggle');
-    const saved = localStorage.getItem('tojeong_theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const isDark = saved === 'dark' || (!saved && prefersDark);
-
-    if (isDark) {
-        document.body.classList.add('dark');
-        themeToggle.textContent = '☀️';
-    } else {
-        document.body.classList.remove('dark');
-        themeToggle.textContent = '🌙';
-    }
-
-    themeToggle.addEventListener('click', () => {
-        document.body.classList.toggle('dark');
-        const activeDark = document.body.classList.contains('dark');
-        themeToggle.textContent = activeDark ? '☀️' : '🌙';
-        localStorage.setItem('tojeong_theme', activeDark ? 'dark' : 'light');
-    });
 }
 
 // ========================================

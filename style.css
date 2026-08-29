@@ -19,19 +19,6 @@
     --shadow-color: rgba(32, 58, 54, 0.08);
 }
 
-body.dark {
-    --primary-dark: #E3EDE9;
-    --primary-light: #12211F;
-    --accent-color: #5B948C;
-    --text-color: #F0F5F3;
-    --text-muted: rgba(240, 245, 243, 0.7);
-    --card-bg: rgba(20, 35, 32, 0.45);
-    --card-border: rgba(255, 255, 255, 0.1);
-    --card-highlight: rgba(255, 255, 255, 0.12);
-    --input-bg: rgba(0, 0, 0, 0.25);
-    --shadow-color: rgba(0, 0, 0, 0.35);
-}
-
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
@@ -45,13 +32,7 @@ body {
     background-repeat: no-repeat;
     background-size: cover;
     background-attachment: fixed;
-    transition: background 0.5s ease, color 0.3s ease;
     word-break: keep-all;
-}
-
-body.dark {
-    background-color: #12211F;
-    background-image: linear-gradient(rgba(10, 24, 22, 0.35), rgba(10, 24, 22, 0.35)), url('./assets/tojeong-bg.webp');
 }
 
 h1, h2, h3, h4, .logo { font-family: 'MaruBuri', serif; letter-spacing: -0.5px; }
@@ -440,32 +421,6 @@ body.dark input:focus, body.dark select:focus, body.dark textarea:focus {
     padding: 0 28px 24px;
 }
 
-/* Floating Theme Toggle */
-.theme-toggle {
-    position: fixed; 
-    right: 32px; 
-    bottom: 32px; 
-    z-index: 1000; 
-    background: var(--card-bg);
-    border: 1px solid var(--card-border); 
-    backdrop-filter: blur(16px); 
-    -webkit-backdrop-filter: blur(16px);
-    border-radius: 50%; 
-    width: 56px; 
-    height: 56px; 
-    font-size: 24px; 
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
-    box-shadow: inset 0 1px 1px var(--card-highlight), 0 8px 24px var(--shadow-color);
-    display: flex; 
-    align-items: center; 
-    justify-content: center;
-}
-
-.theme-toggle:hover { 
-    transform: scale(1.08) translateY(-4px); 
-}
-
 /* History Modal */
 .modal-backdrop {
     position: fixed;
@@ -647,7 +602,6 @@ body.dark input:focus, body.dark select:focus, body.dark textarea:focus {
     
     .btn-main, .share-btn { padding: 15px 20px; font-size: 15px; border-radius: 14px; }
     
-    .theme-toggle { right: 20px; bottom: 20px; width: 48px; height: 48px; font-size: 20px; }
     body { background-position: center top; background-size: auto 100vh; }
     .faq-question { font-size: 15px; padding: 18px 20px; }
     .faq-answer { font-size: 13.5px; }
