@@ -7,10 +7,62 @@ let currentMatchResult = null;
 
 document.addEventListener('DOMContentLoaded', () => {
     setupShareButtons();
+    setupBirthDateInputFormatter();
 });
 
 // ========================================
-// 1. 화면 전환 (네비게이션)
+// 1. 생년월일 스마트 8자리 입력 포맷터 & 유효성 검사
+// ========================================
+function setupBirthDateInputFormatter() {
+    const dateInputIds = ['birthDate', 'myBirthDate', 'partnerBirthDate'];
+    
+    dateInputIds.forEach(id => {
+        const input = document.getElementById(id);
+        if (!input) return;
+
+        input.addEventListener('input', () => {
+            let val = input.value.replace(/\D/g, '');
+            if (val.length > 8) val = val.slice(0, 8);
+
+            if (val.length >= 7) {
+                input.value = `${val.slice(0, 4)}-${val.slice(4, 6)}-${val.slice(6)}`;
+            } else if (val.length >= 5) {
+                input.value = `${val.slice(0, 4)}-${val.slice(4)}`;
+            } else {
+                input.value = val;
+            }
+        });
+    });
+}
+
+function validateAndFormatBirthdate(value, label = '생년월일') {
+    if (!value) return null;
+    const digits = value.replace(/\D/g, '');
+    if (digits.length !== 8) {
+        return { valid: false, error: `${label} 8자리를 입력해주세요 (예: 19950815)` };
+    }
+    const year = parseInt(digits.slice(0, 4), 10);
+    const month = parseInt(digits.slice(4, 6), 10);
+    const day = parseInt(digits.slice(6, 8), 10);
+
+    const currentYear = new Date().getFullYear();
+    if (year < 1920 || year > currentYear + 1) {
+        return { valid: false, error: `출생연도(1920~${currentYear}년)를 확인해주세요.` };
+    }
+    if (month < 1 || month > 12) {
+        return { valid: false, error: '태어난 달(01~12월)을 올바르게 입력해주세요.' };
+    }
+    const maxDays = new Date(year, month, 0).getDate();
+    if (day < 1 || day > maxDays) {
+        return { valid: false, error: `${month}월의 일자(01~${maxDays}일)를 올바르게 입력해주세요.` };
+    }
+
+    const formatted = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    return { valid: true, value: formatted };
+}
+
+// ========================================
+// 2. 화면 전환 (네비게이션)
 // ========================================
 function showSection(id) {
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -43,16 +95,19 @@ function showToast(message) {
 // ========================================
 async function startReading() {
     const targetYear = document.getElementById('targetYear').value;
-    const birthdate = document.getElementById('birthDate').value;
+    const rawBirthDate = document.getElementById('birthDate').value.trim();
     const calendarType = document.getElementById('calendarType').value;
     const genderEl = document.querySelector('input[name="gender"]:checked');
     const birthHour = document.getElementById('birthHour').value;
 
-    if (!birthdate) {
-        showToast('생년월일을 입력해주세요 🙏');
+    const validated = validateAndFormatBirthdate(rawBirthDate, '생년월일');
+    if (!validated || !validated.valid) {
+        showToast(validated ? validated.error : '생년월일 8자리를 입력해주세요 (예: 19950815) 🙏');
         document.getElementById('birthDate').focus();
         return;
     }
+    const birthdate = validated.value;
+
     if (!genderEl) {
         showToast('성별을 선택해주세요 🙏');
         return;
@@ -126,25 +181,30 @@ async function startReading() {
 // 5. 인연 궁합 보기
 // ========================================
 async function startMatchReading() {
-    const myBirthdate = document.getElementById('myBirthDate').value;
+    const rawMyBirthDate = document.getElementById('myBirthDate').value.trim();
     const myCalendarType = document.getElementById('myCalendarType').value;
     const myGenderEl = document.querySelector('input[name="myGender"]:checked');
 
-    const partnerBirthdate = document.getElementById('partnerBirthDate').value;
+    const rawPartnerBirthDate = document.getElementById('partnerBirthDate').value.trim();
     const partnerCalendarType = document.getElementById('partnerCalendarType').value;
     const partnerGenderEl = document.querySelector('input[name="partnerGender"]:checked');
     const relationType = document.getElementById('relationType').value;
 
-    if (!myBirthdate) {
-        showToast('나의 생년월일을 입력해주세요 🙏');
+    const myValidated = validateAndFormatBirthdate(rawMyBirthDate, '나의 생년월일');
+    if (!myValidated || !myValidated.valid) {
+        showToast(myValidated ? myValidated.error : '나의 생년월일 8자리를 입력해주세요 (예: 19950815) 🙏');
         document.getElementById('myBirthDate').focus();
         return;
     }
-    if (!partnerBirthdate) {
-        showToast('상대방의 생년월일을 입력해주세요 🙏');
+    const myBirthdate = myValidated.value;
+
+    const partnerValidated = validateAndFormatBirthdate(rawPartnerBirthDate, '상대방 생년월일');
+    if (!partnerValidated || !partnerValidated.valid) {
+        showToast(partnerValidated ? partnerValidated.error : '상대방 생년월일 8자리를 입력해주세요 (예: 19970324) 🙏');
         document.getElementById('partnerBirthDate').focus();
         return;
     }
+    const partnerBirthdate = partnerValidated.value;
 
     const matchResultCard = document.getElementById('matchResultCard');
     const matchLoadingState = document.getElementById('matchLoadingState');
