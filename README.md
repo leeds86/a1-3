@@ -99,7 +99,6 @@ python server.py
 | :--- | :--- | :--- |
 | **보너스 1** | **데이터 저장 & 운영 자동화** | • **나의 운세 서재**: LocalStorage에 최근 운세 영구 저장 & 재열람 & 원클릭 전체 복사/공유<br>• **문의 알림 자동화**: `/api/inquiry`로 접수된 문의를 Discord/Slack Webhook으로 실시간 전달 |
 | **보너스 2** | **UX 고도화 & 방문자 분석 (Analytics)** | • **실시간 방문자 & 만족도 집계 위젯**: 당일 방문자 수, 누적 운세 풀이 수 실시간 집계 및 카운팅 애니메이션<br>• **실시간 만족도 피드백 투표 시스템**: 운세/궁합 결과 카드에서 `[👍 도움이 됐어요] / [🤔 아쉬워요]` 원클릭 투표 시 실제 만족도 지수(%)가 실시간 계산 및 갱신<br>• **사용자 이벤트 트래커 (`trackEvent`)**: 세션별 섹션 이동, 풀이 요청, 공유 등 행동 로그 추적<br>• **마이크로 인터랙션**: FAQ `+` 45도 회전 아코디언, 로딩 펄스 & 3.5초 지연 안내 문구 자동 전환, 플로팅 토스트, 글래스 카드 호버 리프트 |
-
 ---
 
 ## ✅ 7. 미션 필수 요구사항 충족 자가진단표
@@ -113,3 +112,33 @@ python server.py
 | **5. 환경 변수 보안 관리** | ✅ 충족 | `OPENAI_API_KEY`, `INQUIRY_WEBHOOK_URL`은 `.gitignore` 처리 및 Vercel Secrets로 관리 |
 | **6. 예외 및 실패 처리** | ✅ 충족 | 빈 값 유효성 검사, 네트워크 타임아웃 방어, 로딩 지연 상태 안내, 에러 카드 재시도 UI |
 | **7. 제출 패키지 5종 완비** | ✅ 충족 | 배포 URL, GitHub 레포, README.md, SERVICE_PLAN.md, 증빙 스크린샷 캡처 |
+
+---
+
+## 📸 8. 서비스 스크린샷 및 개발 증빙 자료 (Submission Proof)
+
+### 1) 🖥️ 웹 서비스 주요 화면 (데스크톱 & 모바일)
+
+| 1. 데스크톱 메인 홈 & 실시간 통계 위젯 | 2. 모바일(iPhone) 반응형 UI |
+| :---: | :---: |
+| ![데스크톱 메인](assets/screenshots/01_desktop_home.png) | ![모바일 반응형](assets/screenshots/02_mobile_view.png) |
+
+| 3. 운세 정보 입력 (30분 보정 시간표) | 4. AI 운세 분석 리포트 (상단) |
+| :---: | :---: |
+| ![운세 입력](assets/screenshots/03_fortune_input.png) | ![AI 운세 리포트](assets/screenshots/04_fortune_result_top.png) |
+
+| 5. 토정 살롱의 지혜 & 만족도 피드백 / 공유 | 6. 인연 궁합 입력 (3개 카드 분리 UI) |
+| :---: | :---: |
+| ![만족도 피드백 및 공유](assets/screenshots/05_fortune_result_bottom.png) | ![인연 궁합 입력](assets/screenshots/06_match_input.png) |
+
+| 7. 인연 궁합 AI 분석 리포트 & 실시간 피드백 |
+| :---: |
+| ![인연 궁합 리포트](assets/screenshots/07_match_result.png) |
+
+---
+
+### 2) 🤖 AI 코딩 도구(Antigravity) 활용 및 문제 해결 과정 증빙
+
+> AI 코딩 어시스턴트와의 페어 프로그래밍을 통해 UI/UX 고도화, Vercel Serverless Python 백엔드 구축, 아이폰 생년월일 입력 개선, 실시간 통계 및 피드백 시스템 구축을 단계별로 완수했습니다.
+
+![AI 코딩 도구 개발 증빙](assets/screenshots/08_ai_coding_log.png)
