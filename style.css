@@ -214,6 +214,65 @@ body.dark input:focus, body.dark select:focus, body.dark textarea:focus {
 .radio-group { display: flex; flex-wrap: nowrap; gap: 24px; padding-top: 6px; }
 .radio-label { display: inline-flex !important; flex: 0 0 auto; align-items: center; gap: 8px; cursor: pointer; font-size: 15px; white-space: nowrap; margin-bottom: 0 !important; }
 
+/* [보너스 2] 실시간 살롱 통계 & 방문자 분석 카드 */
+.stats-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 24px;
+    max-width: 540px;
+    margin: 0 auto 36px;
+    padding: 20px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    box-shadow: inset 0 1px 1px var(--card-highlight), 0 12px 32px var(--shadow-color);
+    transition: transform 0.3s ease;
+}
+
+.stats-card:hover {
+    transform: translateY(-2px);
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-align: left;
+}
+
+.stat-icon {
+    font-size: 22px;
+}
+
+.stat-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-num {
+    font-family: 'MaruBuri', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-color);
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 400;
+    margin-top: 2px;
+}
+
+.stat-divider {
+    width: 1px;
+    height: 30px;
+    background: var(--card-border);
+}
+
 /* [UX 개선] 인연 궁합 3개 카드 완벽 가로 정렬 */
 .match-form-container {
     max-width: 800px;
@@ -623,6 +682,12 @@ body.dark input:focus, body.dark select:focus, body.dark textarea:focus {
     input, select, textarea { padding: 14px 16px; font-size: 16px; border-radius: 14px; }
     
     .btn-main, .share-btn { padding: 15px 20px; font-size: 15px; border-radius: 14px; }
+    
+    .stats-card { padding: 16px 14px; border-radius: 20px; margin-bottom: 28px; }
+    .stat-item { gap: 8px; }
+    .stat-icon { font-size: 18px; }
+    .stat-num { font-size: 15px; }
+    .stat-label { font-size: 11px; }
     
     body { background-position: center top; background-size: auto 100vh; }
     .faq-question { font-size: 15px; padding: 18px 20px; }

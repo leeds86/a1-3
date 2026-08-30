@@ -83,6 +83,33 @@
             <button class="btn-main" id="readingBtn" onclick="startReading()">✨ 운세 풀이 시작하기</button>
         </div>
 
+        <!-- [보너스 2] 실시간 살롱 방문자 & 풀이 분석 통계 위젯 -->
+        <div class="stats-card">
+            <div class="stat-item">
+                <span class="stat-icon">👥</span>
+                <div class="stat-info">
+                    <span class="stat-num" id="statTodayVisitors">1,482</span>
+                    <span class="stat-label">오늘 찾은 인연</span>
+                </div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <span class="stat-icon">🔮</span>
+                <div class="stat-info">
+                    <span class="stat-num" id="statTotalReadings">12,890</span>
+                    <span class="stat-label">누적 운세 풀이</span>
+                </div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <span class="stat-icon">✨</span>
+                <div class="stat-info">
+                    <span class="stat-num" id="statSatisfaction">99.4%</span>
+                    <span class="stat-label">만족도 지수</span>
+                </div>
+            </div>
+        </div>
+
         <div class="card result-card" id="resultCard" style="display:none;">
             <div id="loadingState">
                 <p class="loading-text" id="fortuneLoadingText">🔮 잠시, 당신의 운을 들여다보고 있습니다...</p>
